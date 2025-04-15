@@ -1,13 +1,17 @@
 import React from "react";
 import { BookOpen, Users } from "lucide-react";
-import { Link } from "react-router-dom"; // Importing Link from react-router-dom
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 
 function UserDashboard() {
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#EDEDED]">
-      <Header />
-      <div className="max-w-5xl mx-auto px-4 py-16">
+      <div className="fixed top-0 left-0 w-full z-50">
+        <Header />
+      </div>
+
+      {/* Add padding-top to push content below fixed header */}
+      <div className="max-w-5xl mx-auto px-4 pt-28 pb-16">
         <h1 className="text-3xl font-bold text-white mb-6">Welcome, User</h1>
 
         <div className="grid md:grid-cols-2 gap-6">

@@ -15,7 +15,8 @@ export default function Login() {
   return (
     <div>
       <Header />
-      <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center px-4">
+
+      <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center px-4 pt-24">
         <div
           className={`max-w-md w-full space-y-8 p-8 rounded-xl 
           border ${isAdmin ? "border-white" : "border-[#6B21A8]"} 
@@ -96,13 +97,12 @@ export default function Login() {
 
               {!isAdmin && (
                 <div className="text-sm">
-                <a href="#" className="text-[#9333EA] hover:text-[#7A27B6]">
-                  Don't have an account? Signup
-                </a>
-              </div>
-                )}
+                  <a href="#" className="text-[#9333EA] hover:text-[#7A27B6]">
+                    Don't have an account? Signup
+                  </a>
+                </div>
+              )}
             </div>
-              
 
             <button
               type="submit"

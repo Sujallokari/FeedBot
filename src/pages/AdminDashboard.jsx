@@ -8,7 +8,7 @@ function AdminDashboard() {
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#EDEDED]">
       <Header />
-      <div className="max-w-5xl mx-auto px-4 py-16">
+      <div className="max-w-5xl mx-auto px-4 pt-28 pb-16">
         <h1 className="text-3xl font-bold text-white mb-6">Welcome, Admin</h1>
 
         <div className="grid md:grid-cols-2 gap-6">

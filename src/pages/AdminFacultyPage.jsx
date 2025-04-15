@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, FileText } from "lucide-react";
+import jsPDF from "jspdf";
 
-function AdminFacultyCard({ name, branch, feedbackCount, positiveCount, rating, onDelete }) {
+function AdminFacultyCard({ name, branch, feedbackCount, positiveCount, rating, onDelete, onGenerateReport }) {
   return (
     <div className="bg-[#1A1A1A] p-6 rounded-xl border border-[#6B21A8] hover:border-[#9333EA] transition-all relative shadow-md">
       <div
@@ -14,7 +15,14 @@ function AdminFacultyCard({ name, branch, feedbackCount, positiveCount, rating, 
       <p className="text-sm text-[#BBBBBB] mb-1">Branch: {branch}</p>
       <p className="text-sm text-[#BBBBBB] mb-1">Feedbacks: {feedbackCount}</p>
       <p className="text-sm text-[#BBBBBB] mb-1">Positive Feedbacks: {positiveCount}</p>
-      <p className="text-sm text-[#BBBBBB] mb-1">Rating: {rating} ⭐</p>
+      <p className="text-sm text-[#BBBBBB] mb-4">Rating: {rating} ⭐</p>
+      <button
+        onClick={onGenerateReport}
+        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold shadow-md transition-transform hover:scale-105"
+      >
+        <FileText className="w-4 h-4" />
+        Feedback Report
+      </button>
     </div>
   );
 }
@@ -45,6 +53,21 @@ function AdminFacultyPage() {
     }
   };
 
+  const handleGenerateReport = (facultyMember) => {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Faculty Feedback Report", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`Faculty Name: ${facultyMember.name}`, 20, 40);
+    doc.text(`Branch: ${facultyMember.branch}`, 20, 50);
+    doc.text(`Total Feedbacks: ${facultyMember.feedbackCount}`, 20, 60);
+    doc.text(`Positive Feedbacks: ${facultyMember.positiveCount}`, 20, 70);
+    doc.text(`Rating: ${facultyMember.rating} ⭐`, 20, 80);
+
+    doc.save(`${facultyMember.name}_Feedback_Report.pdf`);
+  };
+
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#EDEDED]">
       <div className="max-w-5xl mx-auto px-4 py-16">
@@ -65,11 +88,13 @@ function AdminFacultyPage() {
               key={index}
               {...item}
               onDelete={() => handleDelete(index)}
+              onGenerateReport={() => handleGenerateReport(item)}
             />
           ))}
         </div>
       </div>
 
+      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60">
           <div className="bg-[#1A1A1A] border border-[#6B21A8] rounded-2xl p-8 w-full max-w-md shadow-2xl">
@@ -80,9 +105,7 @@ function AdminFacultyPage() {
                 <input
                   type="text"
                   value={newFaculty.name}
-                  onChange={(e) =>
-                    setNewFaculty({ ...newFaculty, name: e.target.value })
-                  }
+                  onChange={(e) => setNewFaculty({ ...newFaculty, name: e.target.value })}
                   className="w-full px-4 py-2 rounded-xl bg-[#262626] text-white focus:outline-none focus:ring-2 focus:ring-[#9333EA] shadow-inner placeholder-gray-400"
                   placeholder="Enter faculty name"
                 />
@@ -92,9 +115,7 @@ function AdminFacultyPage() {
                 <input
                   type="text"
                   value={newFaculty.branch}
-                  onChange={(e) =>
-                    setNewFaculty({ ...newFaculty, branch: e.target.value })
-                  }
+                  onChange={(e) => setNewFaculty({ ...newFaculty, branch: e.target.value })}
                   className="w-full px-4 py-2 rounded-xl bg-[#262626] text-white focus:outline-none focus:ring-2 focus:ring-[#9333EA] shadow-inner placeholder-gray-400"
                   placeholder="Enter branch"
                 />

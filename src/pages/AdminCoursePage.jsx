@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Trash2, Plus, FileText } from "lucide-react";
+import jsPDF from "jspdf";
 
 function AdminCourseCard({ name, code, feedbackCount, positiveCount, rating, onDelete, onGenerateReport }) {
   return (
@@ -16,13 +17,12 @@ function AdminCourseCard({ name, code, feedbackCount, positiveCount, rating, onD
       <p className="text-sm text-[#BBBBBB] mb-1">Positive Feedbacks: {positiveCount}</p>
       <p className="text-sm text-[#BBBBBB] mb-4">Rating: {rating} ⭐</p>
 
-      {/* Generate Report Button */}
       <button
         onClick={onGenerateReport}
-        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl r font-semibold shadow-md transition-transform hover:scale-105"
+        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold shadow-md transition-transform hover:scale-105"
       >
-        <FileText className="w-4 h-4 " />
-        feedback report
+        <FileText className="w-4 h-4" />
+        Feedback Report
       </button>
     </div>
   );
@@ -55,8 +55,18 @@ function AdminCoursePage() {
   };
 
   const handleGenerateReport = (course) => {
-    console.log(`Generating report for ${course.name} (${course.code})`);
-    // You can add PDF/CSV generation or redirection logic here
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Course Feedback Report", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`Course Name: ${course.name}`, 20, 40);
+    doc.text(`Course Code: ${course.code}`, 20, 50);
+    doc.text(`Total Feedbacks: ${course.feedbackCount}`, 20, 60);
+    doc.text(`Positive Feedbacks: ${course.positiveCount}`, 20, 70);
+    doc.text(`Rating: ${course.rating} ⭐`, 20, 80);
+
+    doc.save(`${course.name}_Feedback_Report.pdf`);
   };
 
   return (
@@ -85,7 +95,7 @@ function AdminCoursePage() {
         </div>
       </div>
 
-      {/* Popup Modal */}
+      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60">
           <div className="bg-[#1A1A1A] border border-[#6B21A8] rounded-2xl p-8 w-full max-w-md shadow-2xl">
