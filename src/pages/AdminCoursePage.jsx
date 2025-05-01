@@ -58,17 +58,17 @@ function AdminCoursePage() {
     const doc = new jsPDF();
     doc.setFontSize(18);
     doc.text("Course Feedback Report", 20, 20);
-
+  
     doc.setFontSize(12);
     doc.text(`Course Name: ${course.name}`, 20, 40);
     doc.text(`Course Code: ${course.code}`, 20, 50);
     doc.text(`Total Feedbacks: ${course.feedbackCount}`, 20, 60);
     doc.text(`Positive Feedbacks: ${course.positiveCount}`, 20, 70);
     doc.text(`Rating: ${course.rating} ⭐`, 20, 80);
-
+  
     doc.save(`${course.name}_Feedback_Report.pdf`);
   };
-
+  
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#EDEDED]">
       <div className="max-w-5xl mx-auto px-4 py-16">

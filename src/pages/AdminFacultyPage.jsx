@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Trash2, Plus, FileText } from "lucide-react";
 import jsPDF from "jspdf";
 
@@ -28,29 +29,65 @@ function AdminFacultyCard({ name, branch, feedbackCount, positiveCount, rating, 
 }
 
 function AdminFacultyPage() {
-  const [faculty, setFaculty] = useState([
-    { name: "Dr. Smith", branch: "CSE", feedbackCount: 30, positiveCount: 25, rating: 4.7 },
-    { name: "Prof. John", branch: "ECE", feedbackCount: 22, positiveCount: 19, rating: 4.3 },
-  ]);
-
+  const [faculty, setFaculty] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newFaculty, setNewFaculty] = useState({ name: "", branch: "" });
 
-  const handleDelete = (index) => {
-    const updated = [...faculty];
-    updated.splice(index, 1);
-    setFaculty(updated);
-  };
+  // Fetch faculty from backend
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/faculty")
+      .then((res) => {
+        const formatted = res.data.map((item) => ({
+          _id: item._id,
+          name: item.name,
+          branch: item.department,
+          feedbackCount: 0,
+          positiveCount: 0,
+          rating: 0
+        }));
+        setFaculty(formatted);
+      })
+      .catch((err) => {
+        console.error("Error fetching faculty:", err);
+      });
+  }, []);
 
   const handleAddFaculty = () => {
     if (newFaculty.name && newFaculty.branch) {
-      setFaculty([
-        ...faculty,
-        { ...newFaculty, feedbackCount: 0, positiveCount: 0, rating: 0 },
-      ]);
-      setShowModal(false);
-      setNewFaculty({ name: "", branch: "" });
+      axios.post("http://localhost:5000/api/faculty", {
+        name: newFaculty.name,
+        department: newFaculty.branch,
+      })
+      .then((res) => {
+        const newEntry = {
+          _id: res.data._id,
+          name: res.data.name,
+          branch: res.data.department,
+          feedbackCount: 0,
+          positiveCount: 0,
+          rating: 0
+        };
+        setFaculty([...faculty, newEntry]);
+        setShowModal(false);
+        setNewFaculty({ name: "", branch: "" });
+      })
+      .catch((err) => {
+        console.error("Error adding faculty:", err);
+      });
     }
+  };
+
+  const handleDelete = (index) => {
+    const facultyToDelete = faculty[index];
+    axios.delete(`http://localhost:5000/api/faculty/${facultyToDelete._id}`)
+      .then(() => {
+        const updated = [...faculty];
+        updated.splice(index, 1);
+        setFaculty(updated);
+      })
+      .catch((err) => {
+        console.error("Error deleting faculty:", err);
+      });
   };
 
   const handleGenerateReport = (facultyMember) => {
@@ -85,7 +122,7 @@ function AdminFacultyPage() {
         <div className="grid md:grid-cols-2 gap-6">
           {faculty.map((item, index) => (
             <AdminFacultyCard
-              key={index}
+              key={item._id}
               {...item}
               onDelete={() => handleDelete(index)}
               onGenerateReport={() => handleGenerateReport(item)}

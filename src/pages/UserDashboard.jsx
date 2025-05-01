@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BookOpen, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import Header from "@/components/Header";
 
 function UserDashboard() {
+  const navigate = useNavigate(); // Hook to handle navigation
+
+  useEffect(() => {
+    // Check if user is logged in by checking token in localStorage
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      // If no token found, redirect to login page
+      navigate("/login");
+    }
+  }, [navigate]);
+
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#EDEDED]">
       <div className="fixed top-0 left-0 w-full z-50">

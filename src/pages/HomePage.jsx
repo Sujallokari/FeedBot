@@ -1,10 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { MessageSquare, Star, Users } from "lucide-react";
 
 function HomePage() {
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if token exists
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  const handleStartFeedback = () => {
+    if (isAuthenticated) {
+      navigate("/user/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#EDEDED]">
       {/* Fixed Header */}
@@ -13,7 +34,7 @@ function HomePage() {
       </div>
 
       {/* Body Content with padding to prevent overlap with fixed header */}
-      <div className="pt-20"> {/* pt-20 to offset fixed header height */}
+      <div className="pt-20">
         <div className="max-w-5xl mx-auto px-4 py-20">
           {/* Hero Section */}
           <div className="text-center">
@@ -25,12 +46,12 @@ function HomePage() {
             </p>
 
             {/* CTA Button */}
-            <Link
-              to="/UserDashboard"
+            <button
+              onClick={handleStartFeedback}
               className="inline-block bg-[#9333EA] text-white py-3 px-6 rounded-xl text-lg font-semibold hover:bg-[#7A27B6] transition-colors mt-6"
             >
               Start Giving Feedback
-            </Link>
+            </button>
           </div>
 
           {/* Features Grid */}

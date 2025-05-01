@@ -9,6 +9,7 @@ import AdminDashboard from './pages/AdminDashboard';
 
 import AdminCoursePage from "./pages/AdminCoursePage";
 import AdminFacultyPage from "./pages/AdminFacultyPage";
+import Signup from './components/Signup';
 
 
 function App() {
@@ -17,13 +18,15 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/UserDashboard" element={<UserDashboard />} />
+        <Route path="/signup" element={< Signup />} />
+        <Route path="/User/dashboard" element={<UserDashboard />} />
         <Route path="/courses" element={<CoursePage />} />
         <Route path="/faculty" element={<FacultyPage />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/Admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/courses" element={<AdminCoursePage />} />
         <Route path="/admin/faculty" element={<AdminFacultyPage />} />
 
+        
         
        
       </Routes>

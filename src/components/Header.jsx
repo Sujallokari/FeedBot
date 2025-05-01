@@ -20,7 +20,7 @@ function Header() {
           <Link to="/" className="text-gray-400 hover:text-white transition-colors font-bold">
             Home
           </Link>
-          <Link to="/AdminDashboard" className="text-gray-400 hover:text-white transition-colors font-bold">
+          <Link to="/about" className="text-gray-400 hover:text-white transition-colors font-bold">
             About
           </Link>
           <Link to="/features" className="text-gray-400 hover:text-white transition-colors font-bold">
@@ -54,6 +54,11 @@ function Header() {
             <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
               Contact
             </Link>
+            <Link to="/login" className="flex items-center space-x-1 text-gray-400 hover:text-green-500 transition-colors font-bold">
+              <UserCircle2 className="h-5 w-5" /> <span>Login</span>
+              
+            </Link>
+
           </nav>
         </div>
       )}
