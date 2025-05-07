@@ -60,4 +60,41 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
+router.patch("/:id/feedback", async (req, res) => {
+  const { isPositive } = req.body;
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    course.feedbackCount += 1;
+    if (isPositive) {
+      course.positiveFeedbackCount += 1;
+    }
+
+    const updated = await course.save();
+    res.json(updated);
+  } catch (err) {
+    console.error("Error updating feedback counts:", err);
+    res.status(500).json({ error: "Error updating feedback counts" });
+  }
+});
+
+// GET a course by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    res.status(200).json(course);
+  } catch (err) {
+    console.error("Error fetching course:", err);
+    res.status(500).json({ error: "Failed to fetch course" });
+  }
+});
+
+
 module.exports = router;

@@ -12,18 +12,27 @@ const feedbackSchema = new mongoose.Schema(
     },
     faculty: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Faculty", // Reference to Faculty model
-      required: false,
+      ref: "Faculty",
     },
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course", // Reference to Course model
-      required: false,
+      ref: "Course",
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }
 );
 
-const Feedback = mongoose.model('Feedback', feedbackSchema);
+// Ensure that either faculty or course is provided
+feedbackSchema.pre('save', function (next) {
+  if (!this.course && !this.faculty) {
+    return next(new Error('Either course or faculty ID must be provided.'));
+  }
+  next();
+});
 
+const Feedback = mongoose.model('Feedback', feedbackSchema);
 module.exports = Feedback;

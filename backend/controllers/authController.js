@@ -30,38 +30,42 @@ const signup = async (req, res) => {
   }
 };
 
-
-
-// Login logic
 // Login logic
 const login = async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      // Fixed Admin Login
-      if (email === 'admin@gmail.com' && password === 'admin123') {
-        const token = jwt.sign({ userId: 'admin', isAdmin: true }, JWT_SECRET_KEY, { expiresIn: '1h' });
-        return res.json({ token, isAdmin: true }); // <--- IMPORTANT
-      }
-  
-      // Regular user login
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-  
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-  
-      const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, JWT_SECRET_KEY, { expiresIn: '1h' });
-  
-      res.json({ token, isAdmin: user.isAdmin }); // <--- IMPORTANT
-    } catch (error) {
-      res.status(500).json({ message: 'Error logging in' });
-    }
-  };
-  
+  const { email, password } = req.body;
 
-module.exports = { signup, login };
+  try {
+    // Fixed Admin Login
+    if (email === 'admin@gmail.com' && password === 'admin123') {
+      const token = jwt.sign({ userId: 'admin', isAdmin: true }, JWT_SECRET_KEY, { expiresIn: '1h' });
+      return res.json({ token, isAdmin: true });
+    }
+
+    // Regular user login
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate a token for the user
+    const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, JWT_SECRET_KEY, { expiresIn: '1h' });
+
+    res.json({ token, isAdmin: user.isAdmin });
+  } catch (error) {
+    res.status(500).json({ message: 'Error logging in' });
+  }
+};
+
+// Logout logic (To handle logout explicitly)
+const logout = (req, res) => {
+  // On the backend, there's not much to do, as we just need to remove the token client-side.
+  // Client should handle this (e.g., clear token from sessionStorage).
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
+module.exports = { signup, login, logout };

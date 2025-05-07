@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { MessageSquare, Star, Users } from "lucide-react";
@@ -9,8 +9,8 @@ function HomePage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check if token exists
-    const token = localStorage.getItem("token");
+    // Check if token exists in sessionStorage
+    const token = sessionStorage.getItem("token");
     if (token) {
       setIsAuthenticated(true);
     } else {
@@ -20,8 +20,10 @@ function HomePage() {
 
   const handleStartFeedback = () => {
     if (isAuthenticated) {
+      // If the user is authenticated, navigate to the user dashboard
       navigate("/user/dashboard");
     } else {
+      // If not authenticated, redirect to login page
       navigate("/login");
     }
   };

@@ -1,3 +1,4 @@
+// models/courseModel.js
 const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema({
@@ -9,6 +10,14 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  feedbackCount: {
+    type: Number,
+    default: 0,
+  },
+  positiveFeedbackCount: {
+    type: Number,
+    default: 0,
   },
 });
 

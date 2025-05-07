@@ -44,4 +44,28 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
+
+// PATCH: Increment feedback counts
+router.patch("/:id/feedback", async (req, res) => {
+  const { isPositive } = req.body; // Boolean to indicate if feedback is positive
+
+  try {
+    const faculty = await Faculty.findById(req.params.id);
+    if (!faculty) {
+      return res.status(404).json({ error: "Faculty not found" });
+    }
+
+    faculty.feedbackCount += 1;
+    if (isPositive) {
+      faculty.positiveFeedbackCount += 1;
+    }
+
+    const updated = await faculty.save();
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: "Error updating feedback count" });
+  }
+});
+
 module.exports = router;

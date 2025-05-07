@@ -12,25 +12,32 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const adminStatus = localStorage.getItem("isAdmin");
+    const token = sessionStorage.getItem("token");
+    const adminStatus = sessionStorage.getItem("isAdmin");
     if (token && adminStatus) {
       setAlreadyLoggedIn(true);
       setIsAdmin(adminStatus === "true");
     }
+
+    window.onbeforeunload = () => {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("isAdmin");
+    };
+
+    return () => {
+      window.onbeforeunload = null;
+    };
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("isAdmin");
     setAlreadyLoggedIn(false);
     navigate("/login");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt:", { email, password, isAdmin });
-
     try {
       const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
@@ -38,15 +45,11 @@ export default function Login() {
         body: JSON.stringify({ email, password, isAdmin }),
       });
 
-      console.log('Response Status:', response.status);
-
       if (response.ok) {
         const data = await response.json();
-        console.log('Login Response:', data);
-
         if (data.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("isAdmin", data.isAdmin);
+          sessionStorage.setItem("token", data.token);
+          sessionStorage.setItem("isAdmin", data.isAdmin);
 
           if (data.isAdmin) {
             navigate("/admin/dashboard");
@@ -58,12 +61,10 @@ export default function Login() {
         }
       } else {
         const data = await response.json();
-        console.log('Error Response:', data);
         setError(data.message || "Failed to log in.");
       }
     } catch (error) {
       setError("An error occurred while logging in.");
-      console.error('Login Error:', error);
     }
   };
 
@@ -99,23 +100,13 @@ export default function Login() {
           </div>
         ) : (
           <div
-            className={`w-full max-w-md p-6 sm:p-8 rounded-xl border ${
-              isAdmin ? "border-white" : "border-[#6B21A8]"
-            } bg-[#1A1A1A] hover:border-[#9333EA] transition-all transform hover:scale-[1.02] hover:shadow-lg`}
+            className={`w-full max-w-md p-6 sm:p-8 rounded-xl border ${isAdmin ? "border-white" : "border-[#6B21A8]"} bg-[#1A1A1A] hover:border-[#9333EA] transition-all transform hover:scale-[1.02] hover:shadow-lg`}
           >
             <div className="text-center">
               <div className="flex justify-center">
-                <School
-                  className={`h-10 w-10 sm:h-12 sm:w-12 ${
-                    isAdmin ? "text-white" : "text-[#9333EA]"
-                  }`}
-                />
+                <School className={`h-10 w-10 sm:h-12 sm:w-12 ${isAdmin ? "text-white" : "text-[#9333EA]"}`} />
               </div>
-              <h2
-                className={`mt-6 text-2xl sm:text-3xl font-bold ${
-                  isAdmin ? "text-[#9333EA]" : "text-white"
-                }`}
-              >
+              <h2 className={`mt-6 text-2xl sm:text-3xl font-bold ${isAdmin ? "text-[#9333EA]" : "text-white"}`}>
                 Welcome back to FeedBot
               </h2>
               <p className="mt-2 text-xs sm:text-sm text-[#EDEDED]">
@@ -131,11 +122,7 @@ export default function Login() {
               <div className="space-y-4">
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail
-                      className={`h-5 w-5 ${
-                        isAdmin ? "text-white" : "text-[#9333EA]"
-                      }`}
-                    />
+                    <Mail className={`h-5 w-5 ${isAdmin ? "text-white" : "text-[#9333EA]"}`} />
                   </div>
                   <input
                     id="email"
@@ -144,20 +131,14 @@ export default function Login() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`block w-full pl-10 pr-3 py-2 border ${
-                      isAdmin ? "border-white" : "border-[#6B21A8]"
-                    } rounded-xl bg-[#1A1A1A] text-white placeholder-[#EDEDED] focus:outline-none focus:ring-2 focus:ring-[#9333EA] focus:border-transparent text-sm`}
+                    className={`block w-full pl-10 pr-3 py-2 border ${isAdmin ? "border-white" : "border-[#6B21A8]"} rounded-xl bg-[#1A1A1A] text-white placeholder-[#EDEDED] focus:outline-none focus:ring-2 focus:ring-[#9333EA] focus:border-transparent text-sm`}
                     placeholder="Email address"
                   />
                 </div>
 
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock
-                      className={`h-5 w-5 ${
-                        isAdmin ? "text-white" : "text-[#9333EA]"
-                      }`}
-                    />
+                    <Lock className={`h-5 w-5 ${isAdmin ? "text-white" : "text-[#9333EA]"}`} />
                   </div>
                   <input
                     id="password"
@@ -166,9 +147,7 @@ export default function Login() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`block w-full pl-10 pr-3 py-2 border ${
-                      isAdmin ? "border-white" : "border-[#6B21A8]"
-                    } rounded-xl bg-[#1A1A1A] text-white placeholder-[#EDEDED] focus:outline-none focus:ring-2 focus:ring-[#9333EA] focus:border-transparent text-sm`}
+                    className={`block w-full pl-10 pr-3 py-2 border ${isAdmin ? "border-white" : "border-[#6B21A8]"} rounded-xl bg-[#1A1A1A] text-white placeholder-[#EDEDED] focus:outline-none focus:ring-2 focus:ring-[#9333EA] focus:border-transparent text-sm`}
                     placeholder="Password"
                   />
                 </div>
@@ -185,10 +164,7 @@ export default function Login() {
                 </button>
 
                 {!isAdmin && (
-                  <Link
-                    to="/signup"
-                    className="text-sm text-[#9333EA] hover:text-[#7A27B6]"
-                  >
+                  <Link to="/signup" className="text-sm text-[#9333EA] hover:text-[#7A27B6]">
                     Don't have an account? Signup
                   </Link>
                 )}
@@ -196,11 +172,7 @@ export default function Login() {
 
               <button
                 type="submit"
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#9333EA] ${
-                  isAdmin
-                    ? "bg-white text-[#9333EA] hover:bg-[#f3e8ff]"
-                    : "bg-[#9333EA] text-white hover:bg-[#7A27B6]"
-                }`}
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#9333EA] ${isAdmin ? "bg-white text-[#9333EA] hover:bg-[#f3e8ff]" : "bg-[#9333EA] text-white hover:bg-[#7A27B6]"}`}
               >
                 Sign in
               </button>
