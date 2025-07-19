@@ -37,5 +37,5 @@ Feedbot is a real-time feedback analysis web application built using **React + V
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Ishan-lokari/FeedBot.git
+git clone https://github.com/Sujallokari/FeedBot.git
 cd FeedBot
