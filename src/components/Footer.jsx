@@ -56,7 +56,7 @@ function Footer() {
             <h3 className="text-white font-semibold mb-4">Connect</h3>
             <div className="flex space-x-4">
               <a
-                href="https://github.com/Ishan-lokari"
+                href="https://github.com/Sujallokari"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
@@ -64,7 +64,7 @@ function Footer() {
                 <Github className="h-6 w-6" />
               </a>
               <a
-                href="https://www.linkedin.com/in/ishan-l-35938025a"
+                href="https://www.linkedin.com/in/sujal-lokari-0742b7287/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
@@ -72,7 +72,7 @@ function Footer() {
                 <Linkedin className="h-6 w-6" />
               </a>
               <a
-                href="mailto:coolishanlokari@gmail.com"
+                href="mailto:sujallokari31@gmail.com"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <Mail className="h-6 w-6" />
