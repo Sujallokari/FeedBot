@@ -22,10 +22,9 @@ function AboutPage() {
 
           {/* Team Members Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <TeamMemberCard name="Ishan Lokari" role="02FE22BCI017" />
-            <TeamMemberCard name="Yashawi N" role="02FE22BCI058" />
-            <TeamMemberCard name="Prachi M" role="02FE22BCI028" />
-            <TeamMemberCard name="Supriya" role="02FE22BCI051" />
+            <TeamMemberCard name="Ishan Lokari" role="" />
+            <TeamMemberCard name="Sujal Lokari" role="" />
+            
           </div>
 
           {/* About FeedBot Section */}
